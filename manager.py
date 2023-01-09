@@ -5,15 +5,15 @@ from tkinter import messagebox
 import math
 
 class Manager:
-    __slots__ = ["__My_Money_Percent", "__Food_Percent", "__Investments_Percent", "__Car_Parts_Percent", "__Coffee_Percent", "__Weed_Percent", "__Disney_Percent"]
+    __slots__ = ["__My_Money_Percent", "__Food_Percent", "__Investments_Percent", "__Car_Parts_Percent", "__Coffee_Percent", "__Fun_Percent", "__Disney_Percent"]
     
-    def __init__(self, my_money, food, investments, car_parts, coffee, weed, disney):
+    def __init__(self, my_money, food, investments, car_parts, coffee, fun, disney):
         self.__My_Money_Percent = my_money
         self.__Food_Percent = food
         self.__Investments_Percent = investments
         self.__Car_Parts_Percent = car_parts
         self.__Coffee_Percent = coffee
-        self.__Weed_Percent = weed 
+        self.__Fun_Percent = fun 
         self.__Disney_Percent = disney
       
         # add seter methods for these
@@ -34,7 +34,7 @@ class Manager:
                         My_Money REAL,
                         Car_Parts REAL,
                         Coffee REAL,
-                        Weed REAL,
+                        Fun REAL,
                         Disney REAL
                     )""")
         
@@ -157,27 +157,27 @@ class Manager:
         return float(Coffee)
         
     
-    def update_Weed(self, number):
+    def update_Fun(self, number):
         connection, cursor = self.connect_to_database()
-        cursor.execute("UPDATE wallet SET Weed = " + str(number))
+        cursor.execute("UPDATE wallet SET Fun = " + str(number))
         connection.commit()
         connection.close()
     
-    def get_Weed(self):
+    def get_Fun(self):
         connection, cursor = self.connect_to_database()
-        cursor.execute("SELECT Weed FROM wallet")
-        Weed = str(cursor.fetchall())
+        cursor.execute("SELECT Fun FROM wallet")
+        Fun = str(cursor.fetchall())
         
-        Weed = Weed.replace(")", "")
-        Weed = Weed.replace("(", "")
-        Weed = Weed.replace(",", "")
-        Weed = Weed.replace("[", "")
-        Weed = Weed.replace("]", "")
+        Fun = Fun.replace(")", "")
+        Fun = Fun.replace("(", "")
+        Fun = Fun.replace(",", "")
+        Fun = Fun.replace("[", "")
+        Fun = Fun.replace("]", "")
         
         connection.commit()
         connection.close()
         
-        return float(Weed)
+        return float(Fun)
         
     
     def update_Disney(self, number):
@@ -209,7 +209,7 @@ class Manager:
                 +  "My_Money : "  + str(self.get_My_Money()) + "\n" \
                     + "Car_Parts : " + str(self.get_Car_Parts()) + "\n" \
                         +  "Coffee : " + str(self.get_Coffee()) + "\n" \
-                            +  "Weed : " + str(self.get_Weed()) + "\n" \
+                            +  "Fun : " + str(self.get_Fun()) + "\n" \
                                 +  "Disney : " + str(self.get_Disney())      
         
     
@@ -237,7 +237,7 @@ class Manager:
                 
                 if "-" in price:
                     if price == '-25.00':
-                        self.update_Weed(self.get_Weed() - 25.00)
+                        self.update_Fun(self.get_Fun() - 25.00)
                     else:
                         if messagebox.askyesno("There was a charge for " + price + " Was this for car stuff "):
                             
@@ -268,7 +268,7 @@ class Manager:
                     elif price == "-25.00" :
                         continue
                     elif "SMOKE" in line[1]:
-                        self.update_Weed(self.get_Weed() - (abs(float(price)) * self.__Weed_Percent)) 
+                        self.update_Fun(self.get_Fun() - (abs(float(price)) * self.__Fun_Percent)) 
                     else:
                         coffee = False
                         
@@ -293,7 +293,7 @@ class Manager:
                         income = abs(float(price))
                         self.update_My_Money(self.get_My_Money() + (income * self.__My_Money_Percent))
                         self.update_Food(self.get_Food() + (income * self.__Food_Percent))
-                        self.update_Weed(self.get_Weed() + (income * self.__Weed_Percent)) 
+                        self.update_Fun(self.get_Fun() + (income * self.__Fun_Percent)) 
                         self.update_Car_Parts(self.get_Car_Parts() + (income * self.__Car_Parts_Percent))
                         self.update_Coffee(self.get_Coffee() + (income * self.__Coffee_Percent))
                         self.update_Investments(self.get_Investments() + (income * self.__Investments_Percent))
@@ -312,7 +312,7 @@ def main():
     manager.update_Car_Parts(0.00)
     manager.update_Coffee(0.00)
     manager.update_My_Money(0.00)
-    manager.update_Weed(0.00)
+    manager.update_Fun(0.00)
     manager.update_Food(0.00)
     manager.update_Investments(0.00)
     manager.update_Disney(0.00)
