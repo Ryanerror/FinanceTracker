@@ -7,14 +7,14 @@ import math
 class Manager:
     __slots__ = ["__My_Money_Percent", "__Food_Percent", "__Investments_Percent", "__Car_Parts_Percent", "__Coffee_Percent", "__Fun_Percent", "__Disney_Percent"]
     
-    def __init__(self, my_money, food, investments, car_parts, coffee, fun, disney):
-        self.__My_Money_Percent = my_money
-        self.__Food_Percent = food
-        self.__Investments_Percent = investments
-        self.__Car_Parts_Percent = car_parts
-        self.__Coffee_Percent = coffee
-        self.__Fun_Percent = fun 
-        self.__Disney_Percent = disney
+    def __init__(self):
+        self.__My_Money_Percent = 0.14    
+        self.__Food_Percent = 0.35
+        self.__Investments_Percent = 0.20
+        self.__Car_Parts_Percent = 0.14
+        self.__Coffee_Percent = 0.07
+        self.__Fun_Percent = 0.09
+        self.__Disney_Percent = 0.01
       
         # add seter methods for these
     
@@ -308,7 +308,7 @@ class Manager:
             
            
 def main():
-    manager = Manager(0.14, 0.35, 0.20, 0.14, 0.07, 0.09, 0.01)
+    manager = Manager()
     manager.update_Car_Parts(0.00)
     manager.update_Coffee(0.00)
     manager.update_My_Money(0.00)
