@@ -2,7 +2,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import manager
+import Manager
 
 
 
@@ -63,7 +63,7 @@ class App:
         
     
     def tracker(self):
-        money = manager.Manager(0.14, 0.35, 0.20, 0.14, 0.07, 0.09, 0.01)
+        money = Manager.Manager(0.14, 0.35, 0.20, 0.14, 0.07, 0.09, 0.01)
         self.config(self.__tracker)
         
         frame_1 = customtkinter.CTkFrame(master=self.__tracker)
