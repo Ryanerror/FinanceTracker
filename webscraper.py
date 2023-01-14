@@ -70,15 +70,15 @@ class WebScrapper:
     def execute(self):
         SavingAccData = "SavingAccData"
         CheckingAccData = "CheckingAccData"
-        dir = 'C:/Users/ryang/OneDrive/Desktop/Spending Tracker/csv'
+        dir = 'C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv'
         shutil.rmtree(dir)
-        os.mkdir("C:/Users/ryang/OneDrive/Desktop/Spending Tracker/csv") 
+        os.mkdir("C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv") 
         
         self.get_loged_in_driver()
         self.get_savings_account_data()
         
         src_path = "C:/Users/ryang/Downloads/stmt.csv"
-        dst_path = "C:/Users/ryang/OneDrive/Desktop/Spending Tracker/csv/CheckingAccData.csv"
+        dst_path = "C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv/CheckingAccData.csv"
         shutil.move(src_path, dst_path)
         
         self.get_loged_in_driver()
@@ -86,7 +86,7 @@ class WebScrapper:
         
         
         src_path = "C:/Users/ryang/Downloads/stmt.csv"
-        dst_path = "C:/Users/ryang/OneDrive/Desktop/Spending Tracker/csv/CheckingAccData.csv"
+        dst_path = "C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv/CheckingAccData.csv"
         shutil.move(src_path, dst_path)
         
             

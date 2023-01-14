@@ -63,7 +63,7 @@ class App:
         
     
     def tracker(self):
-        money = Manager.Manager(0.14, 0.35, 0.20, 0.14, 0.07, 0.09, 0.01)
+        money = Manager.Manager()
         self.config(self.__tracker)
         
         frame_1 = customtkinter.CTkFrame(master=self.__tracker)
@@ -91,10 +91,10 @@ class App:
         progressbar_3.set(money.get_Food())
         progressbar_3.pack(pady=10, padx=10)
 
-        label_5 = customtkinter.CTkLabel(master=frame_1, text="Weed: $" + str(round(money.get_Weed(), 2)), justify=tkinter.LEFT)
+        label_5 = customtkinter.CTkLabel(master=frame_1, text="Fun: $" + str(round(money.get_Fun(), 2)), justify=tkinter.LEFT)
         label_5.pack(pady=10, padx=10)
         progressbar_4 = customtkinter.CTkProgressBar(master=frame_1)
-        progressbar_4.set(money.get_Weed())
+        progressbar_4.set(money.get_Fun())
         progressbar_4.pack(pady=10, padx=10)
         
         label_6 = customtkinter.CTkLabel(master=frame_1, text="Car Parts: $" + str(round(money.get_Car_Parts(), 2)), justify=tkinter.LEFT)
