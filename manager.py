@@ -3,6 +3,12 @@ import sqlite3
 import tkinter
 from tkinter import messagebox
 import csv
+import Texter
+from datetime import *
+import datetime
+import shutil
+import pathlib
+import os
 
 class Manager:
     __slots__ = ["__My_Money_Percent", "__Food_Percent", "__Investments_Percent", "__Car_Parts_Percent", "__Coffee_Percent", "__Fun_Percent", "__Disney_Percent"]
@@ -216,10 +222,13 @@ class Manager:
      
     
     def filter(self):
-        
+        amount_of_money_to_move_to_savings = 0.00
         Aprroved_Transactions = set() 
-        Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"]) 
-        
+        Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"])
+        with open("util/keeptrack.txt") as f:
+            for line in f:
+                line = line.split("/")
+                newest_date = datetime.datetime(int(line[2]), int(line[0]), int(line[1]))                
         try:
             with open("csv/SavingAccData.csv") as data1:
                 file = csv.reader(data1)
@@ -234,19 +243,18 @@ class Manager:
                 next(file)
                 for line in file:
                     price = line[2]
-
+                    x = line[0].split("/")
+                    date = datetime.datetime(int(x[2]), int(x[0]), int(x[1]))
                     
-                    if "-" in price:
-                        if price == '-25.00':
-                            self.update_Fun(self.get_Fun() - 25.00)
-                        else:
-                            Aprroved_Transactions.add(line[1])
+                    if date > newest_date:
+                        if "-" in price:
+                            Aprroved_Transactions.add(line[2])
                             if messagebox.askyesno("There was a charge for " + price + " Was this for car stuff "):
                                 self.update_Car_Parts(self.get_Car_Parts() - abs(float(price)))
                             else:
                                 self.update_My_Money(self.get_My_Money() - abs(float(price)))
-                    else:
-                        pass
+                       
+
         except:
             pass
                 
@@ -264,54 +272,68 @@ class Manager:
                 next(file)
                 for line in file:
                     price = line[2]
-                    
-                    if "-" in price:
-                        if line[1] in Aprroved_Transactions:
-                            continue
-                        elif price == "-25.00" :
-                            continue
-                        elif "SMOKE" in line[1] or "smoke" in line[1]:
-                            self.update_Fun(self.get_Fun() - abs(float(price))) 
-                        elif "disney" in  line[1]:
-                            self.update_Disney(self.get_Disney - abs(float(price)))
-                        else:
-                            coffee = False
-                            
-                            for keyword in Coffee_key_words:
-                                if keyword in line[1]:
-                                    coffee = True
-                                    break
-                                    
-                            
-                            if coffee:
-                                self.update_Coffee(self.get_Coffee() - abs(float(price)))
+                    x = line[0].split("/")
+                    date = datetime.datetime(int(x[2]), int(x[0]), int(x[1]))
+                    if date > newest_date:
+                        if "-" in price:
+                            if line[2] == Aprroved_Transactions:
+                                continue
+                            elif price == "-25.00" :
+                                self.update_Fun(self.get_Fun() - 25.00)
+                            elif "SMOKE" in line[1] or "smoke" in line[1] or "Smoke" in line[1]:
+                                self.update_Fun(self.get_Fun() - abs(float(price))) 
+                            elif "disney" in  line[1]:
+                                self.update_Disney(self.get_Disney - abs(float(price)))
                             else:
-                                self.update_Food(self.get_Food() - abs(float(price))) 
-                            
-                    else:
-                        if "Online Banking transfer from CHK 6015" in line[1]:
-                            pass
-                            
-                        elif "STARBUCKS" in line[1]: 
-                            income = abs(float(price))
-                            self.update_My_Money(self.get_My_Money() + (income * self.__My_Money_Percent))
-                            self.update_Food(self.get_Food() + (income * self.__Food_Percent))
-                            self.update_Fun(self.get_Fun() + (income * self.__Fun_Percent)) 
-                            self.update_Car_Parts(self.get_Car_Parts() + (income * self.__Car_Parts_Percent))
-                            self.update_Coffee(self.get_Coffee() + (income * self.__Coffee_Percent))
-                            self.update_Investments(self.get_Investments() + (income * self.__Investments_Percent))
-                            
-                            if self.get_Disney() >= 11.00:
-                                self.update_My_Money(self.get_My_Money() + (income * self.__Disney_Percent))
-                            else: 
-                                self.update_Disney(self.get_Disney() + (income * self.__Disney_Percent))  
+                                coffee = False
+                                
+                                for keyword in Coffee_key_words:
+                                    if keyword in line[1]:
+                                        coffee = True
+                                        break
+                                        
+                                
+                                if coffee:
+                                    self.update_Coffee(self.get_Coffee() - abs(float(price)))
+                                else:
+                                    self.update_Food(self.get_Food() - abs(float(price))) 
+                                
                         else:
-                            self.update_My_Money(self.get_My_Money() + abs(float(price)))
+                            if "Online Banking transfer from CHK 6015" in line[1]:
+                                pass
+                                
+                            elif "STARBUCKS" in line[1]: 
+                                income = abs(float(price))
+                                self.update_My_Money(self.get_My_Money() + (income * self.__My_Money_Percent))
+                                self.update_Food(self.get_Food() + (income * self.__Food_Percent))
+                                self.update_Fun(self.get_Fun() + (income * self.__Fun_Percent)) 
+                                self.update_Car_Parts(self.get_Car_Parts() + (income * self.__Car_Parts_Percent))
+                                self.update_Coffee(self.get_Coffee() + (income * self.__Coffee_Percent))
+                                self.update_Investments(self.get_Investments() + (income * self.__Investments_Percent))
+                                amount_of_money_to_move_to_savings +=  (income * self.__My_Money_Percent) + (income * self.__Car_Parts_Percent)
+                                if self.get_Disney() >= 11.00:
+                                    self.update_My_Money(self.get_My_Money() + (income * self.__Disney_Percent))
+                                else: 
+                                    self.update_Disney(self.get_Disney() + (income * self.__Disney_Percent))  
+                            else:
+                                self.update_My_Money(self.get_My_Money() + abs(float(price)))
+                earlist_date = line[0]
         except:
-            pass                        
-                            
-                
-            
+            pass
+        
+        if amount_of_money_to_move_to_savings == 0:
+            pass
+        else:
+            texter = Texter.texter("HI ryan its wensnday move " + str(round(amount_of_money_to_move_to_savings, 2)) + " to your savings")
+            texter.notify()
+        
+                        
+        dir = 'C:\\Users\\ryang\\OneDrive\\Desktop\\FinanceTracker\\util\\keeptrack.txt'
+        shutil.rmtree(dir)        
+        os.mkdir(dir)
+        
+        with open(dir) as f:
+            f.write(earlist_date)      
            
 def main():
     manager = Manager()
