@@ -5,7 +5,7 @@ from selenium import webdriver
 
 
 def main():
-    driver = webdriver.Chrome("util/chromedriver.exe")
+    driver = webdriver.Chrome("C:/Users/ryang/OneDrive/Desktop/chromedriver.exe")
     manager = Manager.Manager()
     texter = Texter.texter("")
     scraper = Webscraper.WebScrapper("ryangarvin", "Spongebob,220679187", driver)

@@ -33,38 +33,38 @@ class WebScrapper:
 
 
     def get_checkings_account_data(self):
-        
+        time.sleep(4)
         self.__driver.find_element(By.NAME, "DDA_details").click()
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "download-transactions").click()
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "select_txnPeriod").click()
-        time.sleep(2)
+        time.sleep(4)
         curr_transaction_selection = Select(self.__driver.find_element(By.ID, "select_txnPeriod"))
         curr_transaction_selection.select_by_value("Current transactions")
-        time.sleep(2)
+        time.sleep(4)
         file_type_selection = Select(self.__driver.find_element(By.ID, "select_fileType"))
         file_type_selection.select_by_value("csv")
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "btn-download-txn").click()
-        time.sleep(2)
+        time.sleep(4)
     
     def get_savings_account_data(self):
-        
+        time.sleep(4)
         self.__driver.find_element(By.LINK_TEXT, "Adv Plus Banking - 6015").click()
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "download-transactions").click()
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "select_txnPeriod").click()
-        time.sleep(2)
+        time.sleep(4)
         curr_transaction_selection = Select(self.__driver.find_element(By.ID, "select_txnPeriod"))
         curr_transaction_selection.select_by_value("Current transactions")
-        time.sleep(2)
+        time.sleep(4)
         file_type_selection = Select(self.__driver.find_element(By.ID, "select_fileType"))
         file_type_selection.select_by_value("csv")
-        time.sleep(2)
+        time.sleep(4)
         self.__driver.find_element(By.ID, "btn-download-txn").click()
-        time.sleep(2)
+        time.sleep(4)
     
         
     def execute(self):
@@ -73,8 +73,9 @@ class WebScrapper:
         dir = 'C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv'
         shutil.rmtree(dir)
         os.mkdir("C:/Users/ryang/OneDrive/Desktop/FinanceTracker/csv") 
-        
+        time.sleep(1)
         self.get_loged_in_driver()
+        time.sleep(4)
         self.get_savings_account_data()
         
         src_path = "C:/Users/ryang/Downloads/stmt.csv"
@@ -82,6 +83,7 @@ class WebScrapper:
         shutil.move(src_path, dst_path)
         
         self.get_loged_in_driver()
+        time.sleep(4)
         self.get_checkings_account_data()
         
         
@@ -93,7 +95,7 @@ class WebScrapper:
                 
 
 def main():
-    driver = webdriver.Chrome("util/chromedriver.exe")
+    driver = webdriver.Chrome("C:/Users/ryang/OneDrive/Desktop/chromedriver.exe")
     webscrapper = WebScrapper("ryangarvin", "Spongebob,220679187", driver)
     
     webscrapper.execute()

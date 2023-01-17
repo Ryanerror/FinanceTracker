@@ -34,22 +34,39 @@ class Manager:
     def make_data_table(self):
         # alraedy ran this method dont neeed to run it ever again
         connection, cursor = self.connect_to_database()
-        cursor.execute(""" CREATE TABLE wallet (
-                        Food REAL,
-                        Investments REAL,
-                        My_Money REAL,
-                        Car_Parts REAL,
-                        Coffee REAL,
-                        Fun REAL,
-                        Disney REAL
-                    )""")
-        
+        cursor.execute("CREATE TABLE wallet (Newest_Date TEXT, Food REAL, Investments REAL, My_Money REAL, Car_Parts REAL, Coffee REAL, Fun REAL, Disney REAL)")
+    
+                
         connection.commit()
         connection.close()
       
     def add_row(self):
         connection, cursor = self.connect_to_database()
-        cursor.execute("INSERT INTO wallet VALUES (0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00)")
+
+        cursor.execute("INSERT INTO wallet VAlUES ('2023/1/17', 0, 0, 0, 0, 0, 0, 0)")
+        
+        connection.commit()
+        connection.close()
+        
+    def get_Newest_Date(self):
+        connection, cursor = self.connect_to_database()
+        cursor.execute("SELECT Newest_Date FROM wallet")
+        Newest_Date = str(cursor.fetchall())
+        Newest_Date = Newest_Date.replace(")", "")
+        Newest_Date = Newest_Date.replace("(", "")
+        Newest_Date = Newest_Date.replace(",", "")
+        Newest_Date = Newest_Date.replace("[", "")
+        Newest_Date = Newest_Date.replace("]", "")
+        Newest_Date = Newest_Date.replace("'", "")
+        connection.commit()
+        connection.close()
+        Newest_Date = Newest_Date.split("/")
+        Newest_Date = datetime.datetime(int(Newest_Date[0]), int(Newest_Date[1]), int(Newest_Date[2]))
+        return Newest_Date
+    
+    def update_Newest_Date(self, a_string):
+        connection, cursor = self.connect_to_database()
+        cursor.execute("UPDATE wallet SET Newest_Date = ?", (a_string,))
         connection.commit()
         connection.close()
     
@@ -210,25 +227,26 @@ class Manager:
         
     
     def print_table(self):
-        return "Food : " + str(round(self.get_Food(), 2))  + "\n" \
-            + "Investments : " + str(round(self.get_Investments(), 2)) + "\n" \
-                +  "My_Money : "  + str(round(self.get_My_Money(), 2)) + "\n" \
-                    + "Car_Parts : " + str(round(self.get_Car_Parts(), 2)) + "\n" \
-                        +  "Coffee : " + str(round(self.get_Coffee(), 2)) + "\n" \
-                            +  "Fun : " + str(round(self.get_Fun(), 2)) + "\n" \
-                                +  "Disney : " + str(round(self.get_Disney(), 2))      
+        return "Food : $" + str(round(self.get_Food(), 2))  + "\n" \
+            + "Investments : $" + str(round(self.get_Investments(), 2)) + "\n" \
+                +  "My_Money : $"  + str(round(self.get_My_Money(), 2)) + "\n" \
+                    + "Car_Parts : $" + str(round(self.get_Car_Parts(), 2)) + "\n" \
+                        +  "Coffee : $" + str(round(self.get_Coffee(), 2)) + "\n" \
+                            +  "Fun : $" + str(round(self.get_Fun(), 2)) + "\n" \
+                                +  "Disney : $" + str(round(self.get_Disney(), 2))      
         
     
      
     
     def filter(self):
+        print("made it to filter")
         amount_of_money_to_move_to_savings = 0.00
         Aprroved_Transactions = set() 
         Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"])
-        with open("util/keeptrack.txt") as f:
-            for line in f:
-                line = line.split("/")
-                newest_date = datetime.datetime(int(line[2]), int(line[0]), int(line[1]))                
+        end_date = ""
+        
+        newest_date = self.get_Newest_Date()                
+       
         try:
             with open("csv/SavingAccData.csv") as data1:
                 file = csv.reader(data1)
@@ -246,7 +264,7 @@ class Manager:
                     x = line[0].split("/")
                     date = datetime.datetime(int(x[2]), int(x[0]), int(x[1]))
                     
-                    if date > newest_date:
+                    if date >= newest_date:
                         if "-" in price:
                             Aprroved_Transactions.add(line[2])
                             if messagebox.askyesno("There was a charge for " + price + " Was this for car stuff "):
@@ -260,6 +278,7 @@ class Manager:
                 
         try:
             with open("csv/CheckingAccData.csv") as data2:
+                print("made it in here")
                 file = csv.reader(data2)
                 next(file)
                 next(file)
@@ -273,8 +292,11 @@ class Manager:
                 for line in file:
                     price = line[2]
                     x = line[0].split("/")
+                    
                     date = datetime.datetime(int(x[2]), int(x[0]), int(x[1]))
-                    if date > newest_date:
+                    end_date = str(date.date())
+                    end_date = end_date.replace("-","/")
+                    if date >= newest_date:
                         if "-" in price:
                             if line[2] == Aprroved_Transactions:
                                 continue
@@ -317,7 +339,10 @@ class Manager:
                                     self.update_Disney(self.get_Disney() + (income * self.__Disney_Percent))  
                             else:
                                 self.update_My_Money(self.get_My_Money() + abs(float(price)))
-                earlist_date = line[0]
+                
+                if date > self.get_Newest_Date():
+                    self.update_Newest_Date(end_date)
+                
         except:
             pass
         
@@ -327,28 +352,31 @@ class Manager:
             texter = Texter.texter("HI ryan its wensnday move " + str(round(amount_of_money_to_move_to_savings, 2)) + " to your savings")
             texter.notify()
         
-                        
-        dir = 'C:\\Users\\ryang\\OneDrive\\Desktop\\FinanceTracker\\util\\keeptrack.txt'
-        shutil.rmtree(dir)        
-        os.mkdir(dir)
         
-        with open(dir) as f:
-            f.write(earlist_date)      
+         
+        
+                        
+         
            
 def main():
     manager = Manager()
-    manager.update_Car_Parts(0.00)
-    manager.update_Coffee(0.00)
-    manager.update_My_Money(96.73)
-    manager.update_Fun(0.00)
-    manager.update_Food(0.00)
-    manager.update_Investments(0.00)
-    manager.update_Disney(0.00)
+   
+
+    manager.update_Newest_Date("2023/1/17")
+    print(manager.get_Newest_Date())
+    manager.update_Car_Parts(0)
+    manager.update_Coffee(0)
+    manager.update_My_Money(25.23)
+    manager.update_Fun(0)
+    manager.update_Food(36.56)
+    manager.update_Investments(40.00)
+    manager.update_Disney(0)
+    # manager.update_Newest_Date("1/12/2023")
     
-    
+    # print(manager.get_Newest_Date())
     print(manager.print_table())
-    
-    
+   
+        
     
 if __name__ == "__main__":
     main()
