@@ -8,7 +8,7 @@ def main():
     driver = webdriver.Chrome("C:/Users/ryang/OneDrive/Desktop/chromedriver.exe")
     manager = Manager.Manager()
     texter = Texter.texter("")
-    scraper = Webscraper.WebScrapper("ryangarvin", "Spongebob,220679187", driver)
+    scraper = Webscraper.WebScrapper("ryangarvin", "*************", driver)
     
     scraper.execute()
     manager.filter()
