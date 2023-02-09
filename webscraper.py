@@ -199,7 +199,7 @@ class WebScrapper:
 
 def main():
     driver = webdriver.Chrome("C:/Users/ryang/OneDrive/Desktop/chromedriver.exe")
-    webscrapper = WebScrapper("ryangarvin", "Spongebob,220679187", driver)
+    webscrapper = WebScrapper("ryangarvin", "**************", driver)
     
     webscrapper.execute()
     
