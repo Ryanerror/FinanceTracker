@@ -240,15 +240,17 @@ class Manager:
     
     def filter(self):
         print("made it to filter")
-        amount_of_money_to_move_to_savings = 0.00
+        amount_of_money_to_move_to_savings = 0
+        amount_of_money_to_invest = 0
         Aprroved_Transactions = set() 
         Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"])
+        food_key_words = set(["MCDONALD'S", "CHIPOTLE", "TAICHI BUBBLE TEA", "DOMINO'S", "WENDYS", "NOODLE", "FOOD"])
         end_date = ""
         
         newest_date = self.get_Newest_Date()                
        
         try:
-            with open("csv/SavingAccData.csv") as data1:
+            with open("csv/Saving_diff.csv") as data1:
                 file = csv.reader(data1)
                 next(file)
                 next(file)
@@ -259,6 +261,7 @@ class Manager:
                 next(file)
                 next(file)
                 next(file)
+                
                 for line in file:
                     price = line[2]
                     x = line[0].split("/")
@@ -270,14 +273,15 @@ class Manager:
                             if messagebox.askyesno("There was a charge for " + price + " Was this for car stuff "):
                                 self.update_Car_Parts(self.get_Car_Parts() - abs(float(price)))
                             else:
-                                self.update_My_Money(self.get_My_Money() - abs(float(price)))
+                                self.update_Fun(self.get_Fun() - abs(float(price)))
+                
                        
 
         except:
             pass
                 
         try:
-            with open("csv/CheckingAccData.csv") as data2:
+            with open("csv/checkings_diff.csv") as data2:
                 print("made it in here")
                 file = csv.reader(data2)
                 next(file)
@@ -306,6 +310,8 @@ class Manager:
                                 self.update_Fun(self.get_Fun() - abs(float(price))) 
                             elif "disney" in  line[1]:
                                 self.update_Disney(self.get_Disney - abs(float(price)))
+                            elif "ROBINHOOD" in  line[1]:
+                                self.update_Investments(self.get_Investments + abs(float(price)))
                             else:
                                 coffee = False
                                 
@@ -314,11 +320,19 @@ class Manager:
                                         coffee = True
                                         break
                                         
-                                
                                 if coffee:
                                     self.update_Coffee(self.get_Coffee() - abs(float(price)))
                                 else:
-                                    self.update_Food(self.get_Food() - abs(float(price))) 
+                                    food = False
+                                    for keyword in food_key_words:
+                                        if keyword in line[1]:
+                                            food = True
+                                            break
+                                        
+                                    if food:
+                                        self.update_Food(self.get_Food() - abs(float(price)))
+                                    else:
+                                        self.update_My_Money(self.get_My_Money() - abs(float(price)))
                                 
                         else:
                             if "Online Banking transfer from CHK 6015" in line[1]:
@@ -332,7 +346,8 @@ class Manager:
                                 self.update_Car_Parts(self.get_Car_Parts() + (income * self.__Car_Parts_Percent))
                                 self.update_Coffee(self.get_Coffee() + (income * self.__Coffee_Percent))
                                 self.update_Investments(self.get_Investments() + (income * self.__Investments_Percent))
-                                amount_of_money_to_move_to_savings +=  (income * self.__My_Money_Percent) + (income * self.__Car_Parts_Percent)
+                                amount_of_money_to_move_to_savings =  (income * self.__Fun_Percent) + (income * self.__Car_Parts_Percent)
+                                amount_of_money_to_invest = income * self.__Investments_Percent
                                 if self.get_Disney() >= 11.00:
                                     self.update_My_Money(self.get_My_Money() + (income * self.__Disney_Percent))
                                 else: 
@@ -351,6 +366,12 @@ class Manager:
         else:
             texter = Texter.texter("HI ryan its wensnday move " + str(round(amount_of_money_to_move_to_savings, 2)) + " to your savings")
             texter.notify()
+
+        if amount_of_money_to_invest == 0:
+            pass
+        else:
+            texter = Texter.texter("HI ryan its wensnday move " + str(round(amount_of_money_to_invest, 2)) + " to Robinhood")
+            texter.notify()
         
         
          
@@ -368,7 +389,7 @@ def main():
     manager.update_Coffee(0)
     manager.update_My_Money(25.23)
     manager.update_Fun(0)
-    manager.update_Food(36.56)
+    manager.update_Food(34.11)
     manager.update_Investments(40.00)
     manager.update_Disney(0)
     # manager.update_Newest_Date("1/12/2023")
