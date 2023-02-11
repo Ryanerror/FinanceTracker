@@ -43,7 +43,7 @@ class Manager:
     def add_row(self):
         connection, cursor = self.connect_to_database()
 
-        cursor.execute("INSERT INTO wallet VAlUES ('2023/1/17', 0, 0, 0, 0, 0, 0, 0)")
+        cursor.execute("INSERT INTO wallet VAlUES ('2023/2/10', 0, 0, 0, 0, 0, 0, 0)")
         
         connection.commit()
         connection.close()
@@ -61,7 +61,8 @@ class Manager:
         connection.commit()
         connection.close()
         Newest_Date = Newest_Date.split("/")
-        Newest_Date = datetime.datetime(int(Newest_Date[0]), int(Newest_Date[1]), int(Newest_Date[2]))
+        Newest_Date = datetime.datetime(int(Newest_Date[2]), int(Newest_Date[0]), int(Newest_Date[1]))
+        
         return Newest_Date
     
     def update_Newest_Date(self, a_string):
@@ -381,22 +382,7 @@ class Manager:
            
 def main():
     manager = Manager()
-   
-
-    manager.update_Newest_Date("2023/2/10")
     print(manager.get_Newest_Date())
-    manager.update_Car_Parts(0)
-    manager.update_Coffee(0)
-    manager.update_My_Money(50.23)
-    manager.update_Fun(0)
-    manager.update_Food(4.00)
-    manager.update_Investments(80.00)
-    manager.update_Disney(0)
-    # manager.update_Newest_Date("1/12/2023")
-    
-    # print(manager.get_Newest_Date())
-    print(manager.print_table())
-   
         
     
 if __name__ == "__main__":
