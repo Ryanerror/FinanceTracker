@@ -1,8 +1,8 @@
 Description,,Summary Amt.
 Beginning balance as of 01/25/2023,,"170.51"
 Total credits,,"861.86"
-Total debits,,"-789.97"
-Ending balance as of 02/11/2023,,"242.40"
+Total debits,,"-883.48"
+Ending balance as of 02/14/2023,,"148.89"
 
 Date,Description,Amount,Running Bal.
 01/25/2023,Beginning balance as of 01/25/2023,,"170.51"
@@ -58,3 +58,8 @@ Date,Description,Amount,Running Bal.
 02/09/2023,"CMSVEND*AVI FOOD SYSTEM 02/08 MOBILE PURCHASE WARREN OH","-2.60","26.35"
 02/10/2023,"STARBUCKS CORP DES:NY ID:36828104 INDN:Ryan Zackary Garvin CO ID:AXXXXX5671 PPD","234.06","260.41"
 02/10/2023,"PANERA BREAD #600855 O 02/09 PURCHASE 585-272-7410 NY","-18.01","242.40"
+02/13/2023,"STARBUCKS STORE 28870 02/09 MOBILE PURCHASE HENRIETTA NY","-4.34","238.06"
+02/13/2023,"CHIPOTLE 1313 02/10 MOBILE PURCHASE ROCHESTER NY","-9.18","228.88"
+02/13/2023,"PANERA BREAD #600855 O 02/11 PURCHASE 585-272-7410 NY","-18.01","210.87"
+02/13/2023,"Online Banking transfer to CHK 6015 Confirmation# XXXXX64594","-53.83","157.04"
+02/13/2023,"Amazon Prime*DB3M072D3 02/12 PURCHASE Amzn.com/bill WA","-8.15","148.89"

@@ -61,7 +61,10 @@ class Manager:
         connection.commit()
         connection.close()
         Newest_Date = Newest_Date.split("/")
-        Newest_Date = datetime.datetime(int(Newest_Date[2]), int(Newest_Date[0]), int(Newest_Date[1]))
+        year = int(Newest_Date[0])
+        month= int(Newest_Date[1])
+        day = int(Newest_Date[2])
+        Newest_Date = datetime.datetime(year, month, day)
         
         return Newest_Date
     
@@ -245,7 +248,7 @@ class Manager:
         amount_of_money_to_invest = 0
         Aprroved_Transactions = set() 
         Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"])
-        food_key_words = set(["MCDONALD'S", "CHIPOTLE", "TAICHI BUBBLE TEA", "DOMINO'S", "WENDYS", "NOODLE", "FOOD"])
+        food_key_words = set(["MCDONALD'S", "CHIPOTLE", "TAICHI BUBBLE TEA", "DOMINO'S", "WENDYS", "NOODLE", "FOOD", "PANERA BREAD"])
         end_date = ""
         
         newest_date = self.get_Newest_Date()                
@@ -305,6 +308,8 @@ class Manager:
                         if "-" in price:
                             if line[2] == Aprroved_Transactions:
                                 continue
+                            elif "Online Banking transfer from CHK 6015" in line[1]:
+                                pass
                             elif price == "-25.00" :
                                 self.update_Fun(self.get_Fun() - 25.00)
                             elif "SMOKE" in line[1] or "smoke" in line[1] or "Smoke" in line[1]:
