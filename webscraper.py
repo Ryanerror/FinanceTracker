@@ -29,6 +29,8 @@ class WebScrapper:
         pasword_element.send_keys(self.__password)
 
         pasword_element.submit()
+        
+        # time.sleep(100)
         return self.__driver
 
 
@@ -158,6 +160,7 @@ class WebScrapper:
         
         time.sleep(1)
         self.get_loged_in_driver()
+        
         self.get_checkings_account_data()
         time.sleep(1)
           

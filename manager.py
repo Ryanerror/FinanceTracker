@@ -248,7 +248,7 @@ class Manager:
         amount_of_money_to_invest = 0
         Aprroved_Transactions = set() 
         Coffee_key_words = set(["CAFE", "STARBUCKS", "COFFEE", "coffee", "cafe", "starbucks"])
-        food_key_words = set(["MCDONALD'S", "CHIPOTLE", "TAICHI BUBBLE TEA", "DOMINO'S", "WENDYS", "NOODLE", "FOOD", "PANERA BREAD"])
+        food_key_words = set(["MCDONALD'S", "CHIPOTLE", "TAICHI BUBBLE TEA", "DOMINO'S", "WENDYS", "NOODLE", "FOOD", "PANERA BREAD", "DOORDASH"])
         end_date = ""
         
         newest_date = self.get_Newest_Date()                
@@ -308,16 +308,16 @@ class Manager:
                         if "-" in price:
                             if line[2] == Aprroved_Transactions:
                                 continue
-                            elif "Online Banking transfer from CHK 6015" in line[1]:
+                            elif "CHK 6015" in line[1]:
                                 pass
                             elif price == "-25.00" :
                                 self.update_Fun(self.get_Fun() - 25.00)
                             elif "SMOKE" in line[1] or "smoke" in line[1] or "Smoke" in line[1]:
                                 self.update_Fun(self.get_Fun() - abs(float(price))) 
-                            elif "disney" in  line[1]:
+                            elif "DisneyPLUS" in  line[1]:
                                 self.update_Disney(self.get_Disney - abs(float(price)))
                             elif "ROBINHOOD" in  line[1]:
-                                self.update_Investments(self.get_Investments + abs(float(price)))
+                                pass
                             else:
                                 coffee = False
                                 
@@ -387,7 +387,21 @@ class Manager:
            
 def main():
     manager = Manager()
-    print(manager.get_Newest_Date())
+    texter = Texter.texter("") 
+    manager.update_My_Money(0)
+    manager.update_Investments(132.66)
+    manager.update_Food(25.48)
+    manager.update_Car_Parts(0)
+    manager.update_Disney(5.34)
+    manager.update_Coffee(0)
+    manager.update_Fun(0)
+    print(manager.print_table())
+   
+    
+   
+    texter.set_info(manager.print_table()) 
+    print(manager.print_table())
+    texter.notify()
         
     
 if __name__ == "__main__":
